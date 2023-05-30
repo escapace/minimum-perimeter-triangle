@@ -22,7 +22,7 @@ jobs:
       ref: ${{ needs.context.outputs.ref }}
       node-version: ${{ needs.context.outputs.node-version }}
       pnpm-version: ${{ needs.context.outputs.pnpm-version }}
-      upload-context: true
+      version: ${{ needs.context.outputs.version }}
   release:
     if: needs.context.outputs.environment == 'production'
     runs-on: ubuntu-latest
@@ -31,56 +31,45 @@ jobs:
       - ci
     permissions:
       id-token: write
-      contents: write
       packages: write
+      contents: write
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ needs.context.outputs.ref }}
-          fetch-depth: 0
       - name: setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ needs.context.outputs.node-version }}
-      - name: install pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: ${{ needs.context.outputs.pnpm-version }}
-          run_install: false
-      - name: get pnpm store directory
-        id: pnpm-store-path
-        run: echo "value=$(pnpm store path)" >> $GITHUB_OUTPUT
-      - name: pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-store-path.outputs.value }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store
-      - name: restore lib cache
+      - name: download package
         uses: actions/download-artifact@v3
         with:
-          name: context
-          path: lib
-      - name: write .npmrc
+          name: package
+      - name: publish
         run: |
           cat << EOF > "$HOME/.npmrc"
-            //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+            //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
             @escapace:registry=https://npm.pkg.github.com
+            provenance=true
             always-auth=true
           EOF
 
-          pnpm install
-          pnpm run release ${{ needs.context.outputs.version }}
-
+          npm publish --provenance --access public *.tgz
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: publish
+        run: |
           cat << EOF > "$HOME/.npmrc"
-            //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+            //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
+            @escapace:registry=https://registry.npmjs.org
+            provenance=true
+            always-auth=true
           EOF
 
-          pnpm run release ${{ needs.context.outputs.version }}
+          npm publish --provenance --access public *.tgz
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: github release
-        run: |
-          pnpm exec changelogithub
+        run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
