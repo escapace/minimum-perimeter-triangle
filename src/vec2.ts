@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 export class Vec2 {
   private readonly _x: number
   private readonly _y: number
