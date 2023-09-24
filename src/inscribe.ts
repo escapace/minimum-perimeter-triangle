@@ -460,10 +460,10 @@ export class Wedge {
     err: number
   ): Array<{ circle: Circle; tangent: Line }> | null
   fitCircles(
-    element: Line | Line,
+    element: Line,
     err: number
   ): Array<{ circle: Circle; tangentParameter: number }> | null
-  fitCircles(element: Vec2 | Line | Line, err: number) {
+  fitCircles(element: Vec2 | Line, err: number) {
     if (element instanceof Vec2) {
       return this.isDegenerate
         ? this.fit_Dp(element, err)
