@@ -56,7 +56,7 @@
   "license": "MPL-2.0",
   "module": "lib/esm/index.mjs",
   "private": false,
-  "repository": "escapace/minimum-perimeter-triangle.git",
+  "repository": "escapace/minimum-perimeter-triangle",
   "scripts": {
     "build": "node ./scripts/build.mjs",
     "lint": "ls-lint && eslint 'src/**/*.{js,mjs,cjs,ts,mts,cts}'",
