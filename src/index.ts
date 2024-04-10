@@ -181,7 +181,7 @@ export function minTriangleWithBase(
   const baseParallel = new Line(
     convexHull[antipodIndex],
     convexHull[antipodIndex].plus(BC.delta)
-  )!
+  )
 
   // Bootstrap the algorithm with a degenerate wedge
   let wedge = Inscribe.Wedge.new(BC, baseParallel, err)!
