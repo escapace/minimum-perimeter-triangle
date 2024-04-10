@@ -245,7 +245,7 @@ export class Wedge {
     const A = l.intersectionPoint(this.rightArm, 0)!
     const B = l.intersectionPoint(this.leftArm, 0)!
 
-    const AB = new Line(A, B)!
+    const AB = new Line(A, B)
     const Ap = this.leftArm.closestPoint(A)
 
     // Line A-Ap is normal to both arms => I = (A+Ap)/2 is within arms of the wedge
