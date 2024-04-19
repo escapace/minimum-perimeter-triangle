@@ -242,9 +242,9 @@ export function minTriangle(
     return { A: convexHull[0], B: convexHull[1], C: convexHull[2] }
   }
 
-  const points = convexHull.map((p: { x: number; y: number }) => {
-    return new Vec2(p.x, p.y)
-  })
+  const points = convexHull.map(
+    (p: { x: number; y: number }) => new Vec2(p.x, p.y)
+  )
 
   let A: null | Vec2 = null
   let B: null | Vec2 = null
