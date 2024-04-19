@@ -16,8 +16,8 @@ export function lineTangentToHull(
     k++
   }
 
-  for (let i = k; i < points.length; i++) {
-    const testSide = line.pointOnSide(points[i], halo)
+  for (let index = k; index < points.length; index++) {
+    const testSide = line.pointOnSide(points[index], halo)
     if (testSide === Side.Top) {
       continue
     }
@@ -140,16 +140,17 @@ function findEnclosingSide(
 function findAntipode(points: Vec2[]) {
   // find the farthest point from the start and end point of the range
   let farthestIndex = 0
-  let farthestDist = 0
+  let farthestDistribution = 0
 
-  for (let i = 0, n: number = points.length; i < n; i++) {
+  for (let index = 0, n: number = points.length; index < n; index++) {
     //check if considered point is farther than farthest
-    const testDist: number = new Line(points[0], points[n - 1]).distanceToPoint(
-      points[i]
-    )
-    if (testDist > farthestDist) {
-      farthestDist = testDist
-      farthestIndex = i
+    const testDistribution: number = new Line(
+      points[0],
+      points[n - 1]
+    ).distanceToPoint(points[index])
+    if (testDistribution > farthestDistribution) {
+      farthestDistribution = testDistribution
+      farthestIndex = index
     }
   }
 
@@ -165,7 +166,7 @@ function findAntipode(points: Vec2[]) {
  */
 export function minTriangleWithBase(
   convexHull: Vec2[],
-  err: number,
+  error: number,
   tol: number
 ): { A: Vec2; B: Vec2; C: Vec2 } | null {
   // Sides of the triangle
@@ -184,7 +185,7 @@ export function minTriangleWithBase(
   )
 
   // Bootstrap the algorithm with a degenerate wedge
-  let wedge = Inscribe.Wedge.new(BC, baseParallel, err)!
+  let wedge = Inscribe.Wedge.new(BC, baseParallel, error)!
 
   // Progress of the algorithm through the verices (see ref.)
   let Pn = n - 1
@@ -193,7 +194,7 @@ export function minTriangleWithBase(
   do {
     //iterations
 
-    const CQinfo = findEnclosingSide(wedge, Pn, antipodIndex, convexHull, err)
+    const CQinfo = findEnclosingSide(wedge, Pn, antipodIndex, convexHull, error)
     if (CQinfo === null) {
       return null
     }
@@ -202,9 +203,9 @@ export function minTriangleWithBase(
     // FYI: Q = AC.end;
 
     // reconstruct the wedge with left arm as is and right arm being the recently found side
-    wedge = Inscribe.Wedge.new(wedge.leftArm, AC, err)!
+    wedge = Inscribe.Wedge.new(wedge.leftArm, AC, error)!
 
-    const BPinfo = findEnclosingSide(wedge, Qn, 0, convexHull, err)
+    const BPinfo = findEnclosingSide(wedge, Qn, 0, convexHull, error)
     if (BPinfo === null) {
       return null
     }
@@ -212,7 +213,7 @@ export function minTriangleWithBase(
 
     // FYI: P = AB.end;
 
-    wedge = Inscribe.Wedge.new(wedge.leftArm, AB, err)!
+    wedge = Inscribe.Wedge.new(wedge.leftArm, AB, error)!
 
     // By design |AB| >= |AC| (see ref.), stop when they are close
   } while (AB.length - AC.length > tol)
@@ -226,7 +227,7 @@ export function minTriangleWithBase(
 
 export function minTriangle(
   convexHull: Array<{ x: number; y: number }>,
-  err: number,
+  error: number,
   tol: number
 ): {
   A: { x: number; y: number }
@@ -245,9 +246,9 @@ export function minTriangle(
     return new Vec2(p.x, p.y)
   })
 
-  let A: Vec2 | null = null
-  let B: Vec2 | null = null
-  let C: Vec2 | null = null
+  let A: null | Vec2 = null
+  let B: null | Vec2 = null
+  let C: null | Vec2 = null
   let perimeter = -1
 
   let rotations = 0
@@ -259,7 +260,7 @@ export function minTriangle(
     }
 
     // re-calculate the triangle
-    const triangle = minTriangleWithBase(points, err, tol)
+    const triangle = minTriangleWithBase(points, error, tol)
 
     //assert triangle is found
     if (triangle !== null) {

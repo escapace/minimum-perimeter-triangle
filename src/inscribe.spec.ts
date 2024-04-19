@@ -71,9 +71,9 @@ it('fits circles passing through given point in a degenerate wedge (private fit_
   const p = new Vec2(-0.14, 1.2)
 
   // control values
-  const O2 = new Vec2(-0.34136945531623936, 0.15863054468376064)
-  const O1 = new Vec2(0.9013694553162392, 1.4013694553162392)
-  const r = 1.0606601717798212
+  const O2 = new Vec2(-0.341_369_455_316_239_36, 0.158_630_544_683_760_64)
+  const O1 = new Vec2(0.901_369_455_316_239_2, 1.401_369_455_316_239_2)
+  const r = 1.060_660_171_779_821_2
   // tangents at point for the circles
   const d1 = O1.minus(p).normal()
   const d2 = O2.minus(p).normal()
@@ -100,11 +100,11 @@ it('fits circles touching given line in a degenerate wedge (private fit_Dl)', ()
   const segment = new Line(new Vec2(0, 1), new Vec2(1, 4))
 
   // control values
-  const o2: Vec2 = new Vec2(0.6180339887498949, 0.6180339887498949)
-  const tp2: Vec2 = new Vec2(-0.052786404500042045, 0.841640786499874)
-  const o1: Vec2 = new Vec2(-1.618033988749895, -1.618033988749895)
-  const tp1: Vec2 = new Vec2(-0.947213595499958, -1.841640786499874)
-  const r = 0.7071067811865476
+  const o2: Vec2 = new Vec2(0.618_033_988_749_894_9, 0.618_033_988_749_894_9)
+  const tp2: Vec2 = new Vec2(-0.052_786_404_500_042_045, 0.841_640_786_499_874)
+  const o1: Vec2 = new Vec2(-1.618_033_988_749_895, -1.618_033_988_749_895)
+  const tp1: Vec2 = new Vec2(-0.947_213_595_499_958, -1.841_640_786_499_874)
+  const r = 0.707_106_781_186_547_6
 
   const circlesInfo = w.fitCircles(segment, 10 ** -5)!
 
@@ -131,8 +131,8 @@ it('fits a circle passing through given point in a non-degenerate wedge (private
   const p = new Vec2(1, 1.5)
 
   // control values
-  const O: Vec2 = new Vec2(3.094087527929452, 1.8216796126142416)
-  const r = 2.118650595969362
+  const O: Vec2 = new Vec2(3.094_087_527_929_452, 1.821_679_612_614_241_6)
+  const r = 2.118_650_595_969_362
   // tangents at the point for the circle
   const d: Vec2 = O.minus(p).normal()
 
@@ -151,8 +151,8 @@ it('fits a circle passing through given point in a non-degenerate wedge (private
   const p = new Vec2(0.75, 1.6)
 
   // control values
-  const O = new Vec2(-0.8208203932499367, 0.6791796067500633)
-  const r = 1.8208203932499365
+  const O = new Vec2(-0.820_820_393_249_936_7, 0.679_179_606_750_063_3)
+  const r = 1.820_820_393_249_936_5
   // tangents at the point for the circle
   const d = O.minus(p).normal()
 
@@ -172,10 +172,10 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
 
   const control = {
     circle: {
-      centre: new Vec2(-1.3874258867227922, 2),
-      r: 1.688165034081993
+      centre: new Vec2(-1.387_425_886_722_792_2, 2),
+      r: 1.688_165_034_081_993
     },
-    tangentParameter: 0.12251482265544192
+    tangentParameter: 0.122_514_822_655_441_92
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
@@ -196,8 +196,8 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
 
   const control = {
     circle: {
-      centre: new Vec2(1.7071067811865477, 1.7071067811865477),
-      r: 1.7071067811865477
+      centre: new Vec2(1.707_106_781_186_547_7, 1.707_106_781_186_547_7),
+      r: 1.707_106_781_186_547_7
     },
     tangentParameter: 0.375
   }
@@ -220,10 +220,10 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
 
   const control = {
     circle: {
-      centre: new Vec2(3.414213562373095, 1.4142135623730954),
-      r: 1.4142135623730947
+      centre: new Vec2(3.414_213_562_373_095, 1.414_213_562_373_095_4),
+      r: 1.414_213_562_373_094_7
     },
-    tangentParameter: 0.482843
+    tangentParameter: 0.482_843
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
@@ -244,8 +244,8 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
 
   const control = {
     circle: {
-      centre: new Vec2(2.499999999999998, -9.449747468305835),
-      r: 8.449747468305835
+      centre: new Vec2(2.499_999_999_999_998, -9.449_747_468_305_835),
+      r: 8.449_747_468_305_835
     },
     tangentParameter: 0.25
   }

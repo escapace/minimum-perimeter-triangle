@@ -1,45 +1,54 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 export class Vec2 {
-  private readonly _x: number
-  private readonly _y: number
+  private _norm: number | undefined
+  private _normalized: undefined | Vec2
 
   private _normSquared: number | undefined
-  private _norm: number | undefined
-  private _normalized: Vec2 | undefined
+  private readonly _x: number
+  private readonly _y: number
 
   constructor(x: number, y: number) {
     this._x = x
     this._y = y
   }
 
-  times(s: number): Vec2 {
-    return new Vec2(this._x * s, this._y * s)
+  cross(that: Vec2): number {
+    return this._x * that._y - this._y * that._x
   }
 
-  over(s: number): Vec2 {
-    return new Vec2(this._x / s, this._y / s)
+  dot(that: Vec2): number {
+    return this._x * that._x + this._y * that._y
   }
 
-  get x(): number {
-    return this._x
-  }
-
-  get y(): number {
-    return this._y
-  }
-
-  plus(that: Vec2): Vec2 {
-    return new Vec2(this._x + that._x, this._y + that._y)
+  equals(that: Vec2, error: number): boolean {
+    if (error === 0) {
+      return this.x === that.x && this.y === that.y
+    }
+    return this.minus(that).normSquared < error * error
   }
 
   minus(that: Vec2): Vec2 {
     return new Vec2(this._x - that._x, this._y - that._y)
   }
 
-  get normSquared(): number {
-    return this._normSquared === undefined
-      ? (this._normSquared = this.dot(this))
-      : this._normSquared
+  normal(): Vec2 {
+    return new Vec2(this._y, -this._x)
+  }
+
+  over(s: number): Vec2 {
+    return new Vec2(this._x / s, this._y / s)
+  }
+
+  plus(that: Vec2): Vec2 {
+    return new Vec2(this._x + that._x, this._y + that._y)
+  }
+
+  times(s: number): Vec2 {
+    return new Vec2(this._x * s, this._y * s)
+  }
+
+  toString(): string {
+    return `(${this.x}, ${this.y})`
   }
 
   get norm(): number {
@@ -54,26 +63,17 @@ export class Vec2 {
       : this._normalized
   }
 
-  dot(that: Vec2): number {
-    return this._x * that._x + this._y * that._y
+  get normSquared(): number {
+    return this._normSquared === undefined
+      ? (this._normSquared = this.dot(this))
+      : this._normSquared
   }
 
-  cross(that: Vec2): number {
-    return this._x * that._y - this._y * that._x
+  get x(): number {
+    return this._x
   }
 
-  equals(that: Vec2, err: number): boolean {
-    if (err === 0) {
-      return this.x === that.x && this.y === that.y
-    }
-    return this.minus(that).normSquared < err * err
-  }
-
-  normal(): Vec2 {
-    return new Vec2(this._y, -this._x)
-  }
-
-  toString(): string {
-    return `(${this.x}, ${this.y})`
+  get y(): number {
+    return this._y
   }
 }

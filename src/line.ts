@@ -1,15 +1,15 @@
-import { Vec2 } from './vec2'
+import type { Vec2 } from './vec2'
 
 export enum Side {
+  Left = 1,
   Right = -1,
-  Top = 0,
-  Left = 1
+  Top = 0
 }
 
 export class Line {
-  readonly start: Vec2
-  readonly end: Vec2
   readonly delta: Vec2
+  readonly end: Vec2
+  readonly start: Vec2
 
   constructor(start: Vec2, end: Vec2) {
     this.start = start
@@ -17,15 +17,12 @@ export class Line {
     this.delta = end.minus(start)
   }
 
-  /**
-   * Length of a line is the length between its two defining points
-   */
-  get length(): number {
-    return this.delta.norm
+  closestPoint(p: Vec2): Vec2 {
+    return this.evaluate(this.closestPointParam(p))
   }
 
-  evaluate(t: number): Vec2 {
-    return this.start.plus(this.delta.times(t))
+  closestPointParam(p: Vec2): number {
+    return this.delta.dot(p.minus(this.start)) / this.delta.normSquared
   }
 
   distanceToPoint(p: Vec2): number {
@@ -35,20 +32,28 @@ export class Line {
     )
   }
 
-  pointOnSide(p: Vec2, err = 0): number {
-    const num = this.start.cross(this.end) - p.cross(this.delta)
-    if (num === 0 || Math.abs(num) / this.delta.norm < err) {
-      return Side.Top
+  evaluate(t: number): Vec2 {
+    return this.start.plus(this.delta.times(t))
+  }
+
+  intersectionParameter(that: Line, error: number): null | number {
+    const d = this.delta.cross(that.delta)
+    if (d === 0 || Math.abs(d) < error) {
+      return null // lines are parallel
     }
-    return num > 0 ? Side.Left : Side.Right
+    const dStart: Vec2 = this.start.minus(that.start)
+    return that.delta.cross(dStart) / d
   }
 
-  pointOnTop(p: Vec2, err: number): boolean {
-    return this.pointOnSide(p, err) === Side.Top
+  intersectionPoint(that: Line, error: number): null | Vec2 {
+    const t = this.intersectionParameter(that, error)
+    return t === null ? null : this.evaluate(t)
   }
 
-  overlaps(that: Line, err: number): boolean {
-    return this.pointOnTop(that.start, err) && this.pointOnTop(that.end, err)
+  overlaps(that: Line, error: number): boolean {
+    return (
+      this.pointOnTop(that.start, error) && this.pointOnTop(that.end, error)
+    )
   }
 
   /**
@@ -69,25 +74,22 @@ export class Line {
     )
   }
 
-  intersectionParameter(that: Line, err: number): number | null {
-    const d = this.delta.cross(that.delta)
-    if (d === 0 || Math.abs(d) < err) {
-      return null // lines are parallel
+  pointOnSide(p: Vec2, error = 0): number {
+    const number_ = this.start.cross(this.end) - p.cross(this.delta)
+    if (number_ === 0 || Math.abs(number_) / this.delta.norm < error) {
+      return Side.Top
     }
-    const dStart: Vec2 = this.start.minus(that.start)
-    return that.delta.cross(dStart) / d
+    return number_ > 0 ? Side.Left : Side.Right
   }
 
-  closestPointParam(p: Vec2): number {
-    return this.delta.dot(p.minus(this.start)) / this.delta.normSquared
+  pointOnTop(p: Vec2, error: number): boolean {
+    return this.pointOnSide(p, error) === Side.Top
   }
 
-  closestPoint(p: Vec2): Vec2 {
-    return this.evaluate(this.closestPointParam(p))
-  }
-
-  intersectionPoint(that: Line, err: number): Vec2 | null {
-    const t = this.intersectionParameter(that, err)
-    return t === null ? null : this.evaluate(t)
+  /**
+   * Length of a line is the length between its two defining points
+   */
+  get length(): number {
+    return this.delta.norm
   }
 }

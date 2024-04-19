@@ -50,9 +50,10 @@ it('compute minimal perimeter triangle condinitoned on the base', () => {
   ]
 
   const { A, B, C } = minTriangleWithBase(points, 10 ** -5, 0.1)!
-  assert.ok(A.minus(new Vec2(-2.893530107256646, 0)).norm < 0.1)
+  assert.ok(A.minus(new Vec2(-2.893_530_107_256_646, 0)).norm < 0.1)
   assert.ok(B.minus(new Vec2(3, 0)).norm < 0.1)
   assert.ok(
-    C.minus(new Vec2(-0.11245650896737835, 3.1124565089673784)).norm < 0.1
+    C.minus(new Vec2(-0.112_456_508_967_378_35, 3.112_456_508_967_378_4)).norm <
+      0.1
   )
 })
