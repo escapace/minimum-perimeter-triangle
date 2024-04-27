@@ -1,4 +1,4 @@
-import { assert } from 'chai'
+import { it, assert } from 'vitest'
 import { lineTangentToHull, minTriangleWithBase } from './index'
 import { Line } from './line'
 import { Vec2 } from './vec2'
@@ -11,7 +11,7 @@ it('verifies that a line is tangent to a convex hull', () => {
     new Vec2(3, 0),
     new Vec2(3, -1),
     new Vec2(2, -2),
-    new Vec2(1, -3)
+    new Vec2(1, -3),
   ]
   const line = new Line(new Vec2(3, 3), new Vec2(3, -3))
 
@@ -26,7 +26,7 @@ it('verifies that a line is not tangent to a convex hull', () => {
     new Vec2(3, 0),
     new Vec2(3, -1),
     new Vec2(2, -2),
-    new Vec2(1, -3)
+    new Vec2(1, -3),
   ]
   const line = new Line(new Vec2(3, 3), new Vec2(2, -3))
 
@@ -46,14 +46,11 @@ it('compute minimal perimeter triangle condinitoned on the base', () => {
     new Vec2(-2, 1),
     new Vec2(-1, 2),
     new Vec2(0, 2.5),
-    new Vec2(1, 2)
+    new Vec2(1, 2),
   ]
 
   const { A, B, C } = minTriangleWithBase(points, 10 ** -5, 0.1)!
   assert.ok(A.minus(new Vec2(-2.893_530_107_256_646, 0)).norm < 0.1)
   assert.ok(B.minus(new Vec2(3, 0)).norm < 0.1)
-  assert.ok(
-    C.minus(new Vec2(-0.112_456_508_967_378_35, 3.112_456_508_967_378_4)).norm <
-      0.1
-  )
+  assert.ok(C.minus(new Vec2(-0.112_456_508_967_378_35, 3.112_456_508_967_378_4)).norm < 0.1)
 })

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable typescript/prefer-nullish-coalescing */
 export class Vec2 {
   private _norm: number | undefined
   private _normalized: undefined | Vec2
@@ -52,9 +52,7 @@ export class Vec2 {
   }
 
   get norm(): number {
-    return this._norm === undefined
-      ? (this._norm = Math.sqrt(this.normSquared))
-      : this._norm
+    return this._norm === undefined ? (this._norm = Math.sqrt(this.normSquared)) : this._norm
   }
 
   get normalized(): Vec2 {

@@ -1,4 +1,4 @@
-import { assert } from 'chai'
+import { it, assert } from 'vitest'
 import { Vec2 } from './vec2'
 
 it('multiplies with scalars', () => {
