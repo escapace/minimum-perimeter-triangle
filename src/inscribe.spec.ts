@@ -2,7 +2,7 @@ import { Wedge } from './inscribe'
 import { Line } from './line'
 import { Vec2 } from './vec2'
 
-import { assert } from 'chai'
+import { it, assert } from 'vitest'
 
 it('constructs a degenerate wedge', () => {
   const leftArm = new Line(new Vec2(0, 0), new Vec2(2, 0))
@@ -114,12 +114,8 @@ it('fits circles touching given line in a degenerate wedge (private fit_Dl)', ()
   assert.ok(Math.abs(r - circlesInfo[0].circle.r) < 0.0001)
   assert.ok(Math.abs(r - circlesInfo[1].circle.r) < 0.0001)
 
-  assert.ok(
-    segment.evaluate(circlesInfo[0].tangentParameter).minus(tp1).norm < 0.0001
-  )
-  assert.ok(
-    segment.evaluate(circlesInfo[1].tangentParameter).minus(tp2).norm < 0.0001
-  )
+  assert.ok(segment.evaluate(circlesInfo[0].tangentParameter).minus(tp1).norm < 0.0001)
+  assert.ok(segment.evaluate(circlesInfo[1].tangentParameter).minus(tp2).norm < 0.0001)
 })
 
 it('fits a circle passing through given point in a non-degenerate wedge (private fit_NDp) 1', () => {
@@ -173,18 +169,16 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
   const control = {
     circle: {
       centre: new Vec2(-1.387_425_886_722_792_2, 2),
-      r: 1.688_165_034_081_993
+      r: 1.688_165_034_081_993,
     },
-    tangentParameter: 0.122_514_822_655_441_92
+    tangentParameter: 0.122_514_822_655_441_92,
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
 
   assert.ok(circleInfo.circle.centre.minus(control.circle.centre).norm < 0.0001)
   assert.ok(Math.abs(circleInfo.circle.r - control.circle.r) < 0.0001)
-  assert.ok(
-    Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001
-  )
+  assert.ok(Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001)
 })
 
 it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl) 2', () => {
@@ -197,18 +191,16 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
   const control = {
     circle: {
       centre: new Vec2(1.707_106_781_186_547_7, 1.707_106_781_186_547_7),
-      r: 1.707_106_781_186_547_7
+      r: 1.707_106_781_186_547_7,
     },
-    tangentParameter: 0.375
+    tangentParameter: 0.375,
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
 
   assert.ok(circleInfo.circle.centre.minus(control.circle.centre).norm < 0.0001)
   assert.ok(Math.abs(circleInfo.circle.r - control.circle.r) < 0.0001)
-  assert.ok(
-    Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001
-  )
+  assert.ok(Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001)
 })
 
 it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl) 3', () => {
@@ -221,18 +213,16 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
   const control = {
     circle: {
       centre: new Vec2(3.414_213_562_373_095, 1.414_213_562_373_095_4),
-      r: 1.414_213_562_373_094_7
+      r: 1.414_213_562_373_094_7,
     },
-    tangentParameter: 0.482_843
+    tangentParameter: 0.482_843,
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
 
   assert.ok(circleInfo.circle.centre.minus(control.circle.centre).norm < 0.0001)
   assert.ok(Math.abs(circleInfo.circle.r - control.circle.r) < 0.0001)
-  assert.ok(
-    Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001
-  )
+  assert.ok(Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001)
 })
 
 it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl) 4', () => {
@@ -245,16 +235,14 @@ it('fits a circle touching given line in a non-degenerate wedge (private fit_NDl
   const control = {
     circle: {
       centre: new Vec2(2.499_999_999_999_998, -9.449_747_468_305_835),
-      r: 8.449_747_468_305_835
+      r: 8.449_747_468_305_835,
     },
-    tangentParameter: 0.25
+    tangentParameter: 0.25,
   }
 
   const circleInfo = w.fitCircles(s, 10 ** -5)![0]
 
   assert.ok(circleInfo.circle.centre.minus(control.circle.centre).norm < 0.0001)
   assert.ok(Math.abs(circleInfo.circle.r - control.circle.r) < 0.0001)
-  assert.ok(
-    Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001
-  )
+  assert.ok(Math.abs(circleInfo.tangentParameter - control.tangentParameter) < 0.0001)
 })

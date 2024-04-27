@@ -1,6 +1,6 @@
 import { Line, Side } from './line'
 import { Vec2 } from './vec2'
-import { assert } from 'chai'
+import { it, assert } from 'vitest'
 
 it('computes length', () => {
   const l: Line = new Line(new Vec2(1, 1), new Vec2(4, 5))

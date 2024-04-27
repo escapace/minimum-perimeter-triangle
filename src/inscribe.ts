@@ -2,7 +2,7 @@
 import { Line, Side } from './line'
 import { Vec2 } from './vec2'
 
-export interface Circle {
+interface Circle {
   centre: Vec2
   r: number
 }
@@ -85,7 +85,7 @@ export class Wedge {
 
   private fit_Dl(
     l: Line,
-    error: number
+    error: number,
   ): Array<{ circle: Circle; tangentParameter: number }> | null {
     if (!this.formTriangle(l, error)) {
       // edge is parallel to the arms
@@ -114,11 +114,9 @@ export class Wedge {
     // Now this.right_arm.delta*t + I passes between the arms and parallel to them
 
     const t1 =
-      (AB.delta.cross(A.minus(I)) + r * AB.delta.norm) /
-      AB.delta.cross(this.rightArm.delta)
+      (AB.delta.cross(A.minus(I)) + r * AB.delta.norm) / AB.delta.cross(this.rightArm.delta)
     const t2 =
-      (AB.delta.cross(A.minus(I)) - r * AB.delta.norm) /
-      AB.delta.cross(this.rightArm.delta)
+      (AB.delta.cross(A.minus(I)) - r * AB.delta.norm) / AB.delta.cross(this.rightArm.delta)
 
     const o1: Vec2 = this.rightArm.delta.times(t1).plus(I)
     const o2: Vec2 = this.rightArm.delta.times(t2).plus(I)
@@ -126,19 +124,16 @@ export class Wedge {
     return [
       {
         circle: { centre: o1, r },
-        tangentParameter: l.closestPointParam(o1)
+        tangentParameter: l.closestPointParam(o1),
       },
       {
         circle: { centre: o2, r },
-        tangentParameter: l.closestPointParam(o2)
-      }
+        tangentParameter: l.closestPointParam(o2),
+      },
     ]
   }
 
-  private fit_Dp(
-    p: Vec2,
-    error: number
-  ): Array<{ circle: Circle; tangent: Line }> | null {
+  private fit_Dp(p: Vec2, error: number): Array<{ circle: Circle; tangent: Line }> | null {
     if (!this.strictlyContains(p, error)) {
       // point is not within the wedge
       return null
@@ -192,7 +187,7 @@ export class Wedge {
       const O = this.rightArm.delta.times(t0).plus(I)
       result.push({
         circle: { centre: O, r },
-        tangent: new Line(p, p.plus(O.minus(p).normal()))
+        tangent: new Line(p, p.plus(O.minus(p).normal())),
       })
     })
 
@@ -201,7 +196,7 @@ export class Wedge {
 
   private fit_NDl(
     l: Line,
-    error: number
+    error: number,
   ): Array<{ circle: Circle; tangentParameter: number }> | null {
     if (!this.formTriangle(l, error)) {
       // Edge is parallel to one of the arms
@@ -248,7 +243,7 @@ export class Wedge {
       new Vec2(B.cross(A) + r * c, C.cross(A) + r * a),
       new Vec2(B.cross(A) + r * c, C.cross(A) - r * a),
       new Vec2(B.cross(A) - r * c, C.cross(A) + r * a),
-      new Vec2(B.cross(A) - r * c, C.cross(A) - r * a)
+      new Vec2(B.cross(A) - r * c, C.cross(A) - r * a),
     ]
 
     // Possible centres
@@ -257,8 +252,8 @@ export class Wedge {
       OAll.push(
         new Vec2(
           new Vec2(AB.delta.x, AC.delta.x).cross(lhs),
-          new Vec2(AB.delta.y, AC.delta.y).cross(lhs)
-        ).over(-det)
+          new Vec2(AB.delta.y, AC.delta.y).cross(lhs),
+        ).over(-det),
       )
     })
 
@@ -268,7 +263,7 @@ export class Wedge {
     for (const O of OAll) {
       dists.push({
         norm: Math.abs(BC.distanceToPoint(O) / r - 1),
-        raw: Math.abs(BC.distanceToPoint(O) - r)
+        raw: Math.abs(BC.distanceToPoint(O) - r),
       })
       // absolute error --- is the distance between circle and a line, this is the ultimate measure of closeness
       const absoluteError = Math.abs(BC.distanceToPoint(O) - r)
@@ -298,8 +293,8 @@ export class Wedge {
     return [
       {
         circle: { centre: o, r },
-        tangentParameter: l.closestPointParam(o)
-      }
+        tangentParameter: l.closestPointParam(o),
+      },
     ]
   }
 
@@ -311,10 +306,7 @@ export class Wedge {
   // 4. Wedge is non-degenerate and additional element is a line
   // according to these assumptions, the following methods are named
 
-  private fit_NDp(
-    p: Vec2,
-    error: number
-  ): Array<{ circle: Circle; tangent: Line }> | null {
+  private fit_NDp(p: Vec2, error: number): Array<{ circle: Circle; tangent: Line }> | null {
     if (!this.strictlyContains(p, error)) {
       return null
     }
@@ -366,10 +358,7 @@ export class Wedge {
       const t1 = (-eB + Math.sqrt(discriminant)) / (2 * eA)
       const t2 = (-eB - Math.sqrt(discriminant)) / (2 * eA)
       // Pick the value corresponding to larger radius
-      if (
-        bisector.evaluate(t1).minus(p).normSquared >
-        bisector.evaluate(t2).minus(p).normSquared
-      ) {
+      if (bisector.evaluate(t1).minus(p).normSquared > bisector.evaluate(t2).minus(p).normSquared) {
         O = bisector.evaluate(t1)
         r = bisector.evaluate(t1).minus(p).norm
       } else {
@@ -381,26 +370,21 @@ export class Wedge {
     return [
       {
         circle: { centre: O, r },
-        tangent: new Line(p, p.plus(O.minus(p).normal()))
-      }
+        tangent: new Line(p, p.plus(O.minus(p).normal())),
+      },
     ]
   }
 
-  fitCircles(
-    element: Vec2,
-    error: number
-  ): Array<{ circle: Circle; tangent: Line }> | null
+  fitCircles(element: Vec2, error: number): Array<{ circle: Circle; tangent: Line }> | null
 
   fitCircles(
     element: Line,
-    error: number
+    error: number,
   ): Array<{ circle: Circle; tangentParameter: number }> | null
 
   fitCircles(element: Line | Vec2, error: number) {
     if (element instanceof Vec2) {
-      return this.isDegenerate
-        ? this.fit_Dp(element, error)
-        : this.fit_NDp(element, error)
+      return this.isDegenerate ? this.fit_Dp(element, error) : this.fit_NDp(element, error)
     }
     if (element instanceof Line) {
       return this.isDegenerate
@@ -453,8 +437,7 @@ export class Wedge {
         true
       : // 2. (Because the arms intersect)
         // Projection params of the point onto the arms must be larger than 0
-        this.leftArm.closestPointParam(p) >= 0 &&
-          this.rightArm.closestPointParam(p) >= 0
+        this.leftArm.closestPointParam(p) >= 0 && this.rightArm.closestPointParam(p) >= 0
   }
   strictlyContains(p: Vec2, error: number): boolean {
     const pLeft = this.leftArm.pointOnSide(p, error)
@@ -475,8 +458,7 @@ export class Wedge {
         true
       : // 2. (Because the arms intersect)
         // Projection params of the point onto the arms must be larger than 0
-        this.leftArm.closestPointParam(p) >= 0 &&
-          this.rightArm.closestPointParam(p) >= 0
+        this.leftArm.closestPointParam(p) >= 0 && this.rightArm.closestPointParam(p) >= 0
   }
 
   toString(): string {

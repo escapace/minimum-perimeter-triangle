@@ -5,7 +5,7 @@ import { Vec2 } from './vec2'
 export function lineTangentToHull(
   line: Line,
   points: Vec2[],
-  halo: number
+  halo: number,
 ): { holds: boolean; side: number } {
   let holds = true
   let side = Side.Top
@@ -38,14 +38,14 @@ export function lineTangentToHull(
  *
  * startVertex is used to define the edge we start from.
  * endVertex is the last possible vertex through which a circle can be fitted into the wedge
- * startVertex > endVertex
+ * startVertex \> endVertex
  */
 function findEnclosingSide(
   wedge: Inscribe.Wedge,
   startVertex: number,
   endVertex: number,
   points: Vec2[],
-  halo: number
+  halo: number,
 ): { side: Line; stopVertex: number } | null {
   // Enclosing side
   let side: Line | null = null
@@ -110,10 +110,7 @@ function findEnclosingSide(
           }
 
           tangent =
-            circlesPoint[0].tangent.pointOnSide(
-              circlesPoint[0].circle.centre,
-              halo
-            ) !== sidedness
+            circlesPoint[0].tangent.pointOnSide(circlesPoint[0].circle.centre, halo) !== sidedness
               ? circlesPoint[0].tangent
               : circlesPoint[1].tangent
         } else {
@@ -144,10 +141,9 @@ function findAntipode(points: Vec2[]) {
 
   for (let index = 0, n: number = points.length; index < n; index++) {
     //check if considered point is farther than farthest
-    const testDistribution: number = new Line(
-      points[0],
-      points[n - 1]
-    ).distanceToPoint(points[index])
+    const testDistribution: number = new Line(points[0], points[n - 1]).distanceToPoint(
+      points[index],
+    )
     if (testDistribution > farthestDistribution) {
       farthestDistribution = testDistribution
       farthestIndex = index
@@ -167,7 +163,7 @@ function findAntipode(points: Vec2[]) {
 export function minTriangleWithBase(
   convexHull: Vec2[],
   error: number,
-  tol: number
+  tol: number,
 ): { A: Vec2; B: Vec2; C: Vec2 } | null {
   // Sides of the triangle
   let AB: Line, AC: Line
@@ -179,10 +175,7 @@ export function minTriangleWithBase(
 
   // Find the antipodal point to the base, i.e. the farthest point
   const antipodIndex = findAntipode(convexHull)
-  const baseParallel = new Line(
-    convexHull[antipodIndex],
-    convexHull[antipodIndex].plus(BC.delta)
-  )
+  const baseParallel = new Line(convexHull[antipodIndex], convexHull[antipodIndex].plus(BC.delta))
 
   // Bootstrap the algorithm with a degenerate wedge
   let wedge = Inscribe.Wedge.new(BC, baseParallel, error)!
@@ -228,7 +221,7 @@ export function minTriangleWithBase(
 export function minTriangle(
   convexHull: Array<{ x: number; y: number }>,
   error: number,
-  tol: number
+  tol: number,
 ): {
   A: { x: number; y: number }
   B: { x: number; y: number }
@@ -242,9 +235,7 @@ export function minTriangle(
     return { A: convexHull[0], B: convexHull[1], C: convexHull[2] }
   }
 
-  const points = convexHull.map(
-    (p: { x: number; y: number }) => new Vec2(p.x, p.y)
-  )
+  const points = convexHull.map((p: { x: number; y: number }) => new Vec2(p.x, p.y))
 
   let A: null | Vec2 = null
   let B: null | Vec2 = null
@@ -266,8 +257,7 @@ export function minTriangle(
     if (triangle !== null) {
       const { A: A1, B: B1, C: C1 } = triangle
 
-      const perimeter1 =
-        A1.minus(B1).norm + B1.minus(C1).norm + C1.minus(A1).norm
+      const perimeter1 = A1.minus(B1).norm + B1.minus(C1).norm + C1.minus(A1).norm
       if (perimeter1 < perimeter || perimeter === -1) {
         ;[A, B, C] = [A1, B1, C1]
         perimeter = perimeter1
@@ -282,6 +272,6 @@ export function minTriangle(
     : {
         A: { x: A!.x, y: A!.y },
         B: { x: B!.x, y: B!.y },
-        C: { x: C!.x, y: C!.y }
+        C: { x: C!.x, y: C!.y },
       }
 }
