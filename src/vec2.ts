@@ -1,7 +1,7 @@
 /* eslint-disable typescript/prefer-nullish-coalescing */
 export class Vec2 {
   private _norm: number | undefined
-  private _normalized: undefined | Vec2
+  private _normalized: Vec2 | undefined
 
   private _normSquared: number | undefined
   private readonly _x: number

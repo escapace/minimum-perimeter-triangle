@@ -3,7 +3,7 @@ import type { Vec2 } from './vec2'
 export enum Side {
   Left = 1,
   Right = -1,
-  Top = 0
+  Top = 0,
 }
 
 export class Line {
@@ -26,17 +26,14 @@ export class Line {
   }
 
   distanceToPoint(p: Vec2): number {
-    return (
-      Math.abs(p.cross(this.delta) - this.start.cross(this.end)) /
-      this.delta.norm
-    )
+    return Math.abs(p.cross(this.delta) - this.start.cross(this.end)) / this.delta.norm
   }
 
   evaluate(t: number): Vec2 {
     return this.start.plus(this.delta.times(t))
   }
 
-  intersectionParameter(that: Line, error: number): null | number {
+  intersectionParameter(that: Line, error: number): number | null {
     const d = this.delta.cross(that.delta)
     if (d === 0 || Math.abs(d) < error) {
       return null // lines are parallel
@@ -45,15 +42,13 @@ export class Line {
     return that.delta.cross(dStart) / d
   }
 
-  intersectionPoint(that: Line, error: number): null | Vec2 {
+  intersectionPoint(that: Line, error: number): Vec2 | null {
     const t = this.intersectionParameter(that, error)
     return t === null ? null : this.evaluate(t)
   }
 
   overlaps(that: Line, error: number): boolean {
-    return (
-      this.pointOnTop(that.start, error) && this.pointOnTop(that.end, error)
-    )
+    return this.pointOnTop(that.start, error) && this.pointOnTop(that.end, error)
   }
 
   /**
@@ -68,10 +63,7 @@ export class Line {
   parallel(that: Line, deviationFromZeroAngle: number): boolean {
     const d: number = Math.abs(this.delta.cross(that.delta))
     //https://en.wikipedia.org/wiki/Cross_product#Geometric_meaning
-    return (
-      d === 0 ||
-      d < this.length * this.length * Math.sin(deviationFromZeroAngle)
-    )
+    return d === 0 || d < this.length * this.length * Math.sin(deviationFromZeroAngle)
   }
 
   pointOnSide(p: Vec2, error = 0): number {

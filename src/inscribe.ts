@@ -23,7 +23,7 @@ export class Wedge {
     this.isDegenerate = isDegenerate
   }
 
-  static new(leftArm: Line, rightArm: Line, error: number): null | Wedge {
+  static new(leftArm: Line, rightArm: Line, error: number): Wedge | null {
     if (leftArm === null || rightArm === null) {
       return null
     }
@@ -258,7 +258,7 @@ export class Wedge {
     })
 
     //choose the one touching the third side
-    let o: null | Vec2 = null
+    let o: Vec2 | null = null
     const dists: Array<{ norm: number; raw: number }> = []
     for (const O of OAll) {
       dists.push({
