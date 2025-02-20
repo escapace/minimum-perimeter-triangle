@@ -43,7 +43,8 @@
   "module": "lib/neutral/index.js",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "lefthook"
+      "lefthook",
+      "esbuild"
     ]
   },
   "private": false,
